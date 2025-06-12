@@ -1,0 +1,11 @@
+crewai==0.130.0          # Pin to a very recent, generally stable version
+crewai_tools==0.14.0     # Pin to a version known to work well with 0.130.0 of crewai
+pydantic                 # Let pip resolve pydantic version
+PyPDF2==3.0.1
+fastapi
+uvicorn[standard]
+python-multipart
+streamlit
+httpx
+python-dotenv
+reportlab
