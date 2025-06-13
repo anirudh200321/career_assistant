@@ -1,234 +1,153 @@
 import os
-import logging
 from crewai import Agent, Task, Crew
-from crewai_tools import BaseTool
+from crewai_tools import Tool
+from langchain_groq import ChatGroq
 from pydantic import BaseModel, Field
-from typing import Type
-import PyPDF2
+from typing import List, Dict, Any
 from dotenv import load_dotenv
-import json # ADD THIS: For parsing LLM responses within the tool
-from litellm import completion # ADD THIS: For making direct LLM calls in the tool
 
+# --- Load environment variables ---
 load_dotenv()
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-os.environ["CREW_LOGGING_LEVEL"] = "DEBUG"
+# --- LLM Setup ---
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-class ResumeProcessingToolInput(BaseModel):
-    """Input for ResumeProcessingTool."""
-    pdf_path: str = Field(description="The file path to the PDF resume.")
+if not GROQ_API_KEY:
+    # This check should ideally catch if the key is missing from .env
+    print("ERROR: GROQ_API_KEY environment variable not set.")
+    raise ValueError(
+        "GROQ_API_KEY environment variable not set. "
+        "Please ensure it's in your .env file (e.g., GROQ_API_KEY='your_key_here') "
+        "and that the .env file is in the root of your project."
+    )
 
-class ResumeProcessingTool(BaseTool):
-    name: str = "resume_processing_tool"
-    description: str = "Processes a PDF resume to extract text and identify skills."
-    args_schema: Type[BaseModel] = ResumeProcessingToolInput
+# Sanity check: print a masked version of the key to confirm it's loaded
+print(f"GROQ_API_KEY loaded: {'*****' + GROQ_API_KEY[-4:] if GROQ_API_KEY else 'None (ERROR - API Key missing)'}")
 
-    def _run(self, pdf_path: str) -> dict:
-        extracted_text = ""
-        try:
-            with open(pdf_path, 'rb') as file:
-                reader = PyPDF2.PdfReader(file)
-                for page_num in range(len(reader.pages)):
-                    extracted_text += reader.pages[page_num].extract_text() or ""
-            if not extracted_text.strip():
-                raise ValueError("No readable text found in PDF.")
-        except Exception as e:
-            logging.error(f"Error reading or processing PDF: {e}")
-            return {"error": f"Failed to read or process PDF: {e}", "extracted_text": "", "skills": []}
+groq_llm = None # Initialize to None to be explicit
 
-        # --- NEW: Use LLM for enhanced skill extraction and resume summarization ---
-        logging.info("Using LLM for enhanced skill extraction and resume summarization...")
-        try:
-            llm_prompt = f"""
-            Analyze the following resume text.
-            Extract all unique skills (programming languages, frameworks, tools, soft skills, domain knowledge) present in the resume.
-            Also, provide a concise summary of the resume's objective, education, and relevant experience.
+try:
+    groq_llm = ChatGroq(
+        temperature=0.7,
+        model_name="groq/llama3-8b-8192", # This was the previous fix for litellm
+        api_key=GROQ_API_KEY
+    )
+    print("ChatGroq LLM initialized successfully.")
 
-            Format your response as a JSON object with two keys:
-            "skills": a list of strings representing the extracted skills.
-            "summary": a string containing the concise resume summary.
+    # CRITICAL NEW CHECK: Verify the LLM object is not None immediately after initialization
+    if groq_llm is None:
+        raise RuntimeError("ChatGroq LLM object is None after successful initialization block. This is unexpected.")
+    
+    # Optional: Further checks if LLM object is actually callable or has expected attributes
+    # For example, hasattr(groq_llm, 'invoke') would check if it has a basic method
+    # The 'function_calling_llm' attribute error is typically internal to CrewAI's use
+    # of the LLM, so ensuring 'groq_llm' itself is not None is the primary goal.
 
-            Resume Text:
-            ---
-            {extracted_text}
-            ---
-            """
-            
-            # Make a direct LLM call using litellm
-            response = completion(
-                model=os.environ["OPENAI_MODEL_NAME"], # Uses Groq model specified in env
-                messages=[
-                    {"role": "system", "content": "You are an expert resume analyst, highly skilled in extracting detailed information."},
-                    {"role": "user", "content": llm_prompt}
-                ],
-                response_format={"type": "json_object"}, # Ensure JSON response
-                temperature=0.2 # Keep temperature low for factual extraction
-            )
-            
-            # Extract content from the LLM response
-            llm_content = response.choices[0].message.content
-            parsed_llm_output = json.loads(llm_content)
-            
-            found_skills = parsed_llm_output.get("skills", [])
-            resume_summary = parsed_llm_output.get("summary", "No summary provided.")
-
-            logging.info(f"LLM extracted {len(found_skills)} skills and a summary.")
-            return {
-                "status": "success",
-                "extracted_text": extracted_text, # Keep original text for context if needed
-                "skills": found_skills,
-                "resume_summary": resume_summary # New: Add resume summary
-            }
-
-        except Exception as llm_e:
-            logging.error(f"Error during LLM skill extraction: {llm_e}")
-            # Fallback to basic keyword matching if LLM extraction fails
-            common_skills = [
-                "Python", "Java", "C++", "JavaScript", "React", "Angular", "Vue.js",
-                "SQL", "NoSQL", "MongoDB", "PostgreSQL", "MySQL", "Docker", "Kubernetes",
-                "AWS", "Azure", "GCP", "Machine Learning", "Deep Learning", "Data Analysis",
-                "Pandas", "NumPy", "Scikit-learn", "TensorFlow", "PyTorch", "Git", "API",
-                "FastAPI", "Streamlit", "LangChain", "CrewAI", "Communication", "Teamwork",
-                "Project Management", "Data Science", "Web Development", "Cloud Computing"
-            ]
-            found_skills = []
-            text_lower = extracted_text.lower()
-            for skill in common_skills:
-                if skill.lower() in text_lower:
-                    found_skills.append(skill)
-            found_skills = sorted(list(set(found_skills)))
-            logging.warning("Falling back to basic keyword skill extraction.")
-            return {
-                "status": "partial_success",
-                "extracted_text": extracted_text,
-                "skills": found_skills,
-                "resume_summary": "LLM extraction failed, basic skills extracted."
-            }
+except Exception as e:
+    print(f"ERROR: Failed to initialize ChatGroq LLM: {e}")
+    # Re-raise the exception to prevent the application from starting
+    # with a non-functional LLM.
+    raise RuntimeError(f"Failed to initialize Groq LLM: {e}. Check your API key, model name, and network connectivity.")
 
 
-# Initialize the custom tool
-resume_processing_tool = ResumeProcessingTool()
+# --- Pydantic Models for Structured Output ---
+class CareerGuidanceDetails(BaseModel):
+    career_path_suggestion: str = Field(description="A personalized suggestion for a career path.")
+    relevant_skills_gap: str = Field(description="Specific skills the user needs to acquire or improve to achieve their career goal.")
+    actionable_steps: str = Field(description="Detailed and practical steps to bridge identified skills gaps, including courses, projects, and networking.")
+    potential_job_titles: List[str] = Field(description="A list of 5-10 job titles that align with the user's profile and suggested career path.")
 
-os.environ["OPENAI_API_BASE"] = "https://api.groq.com/openai/v1"
-os.environ["OPENAI_API_KEY"] = os.getenv("GROQ_API_KEY", "")
-os.environ["OPENAI_MODEL_NAME"] = "llama3-8b-8192"
+class JobMatch(BaseModel):
+    title: str = Field(description="Job title.")
+    company: str = Field(description="Company offering the job.")
+    location: str = Field(description="Job location.")
+    skills_required: List[str] = Field(description="List of skills required for the job.")
+    description: str = Field(description="Brief description of the job.")
 
-resume_agent = Agent(
-    role='Resume Processor',
-    goal='Extract key information, especially skills and a summary, from a PDF resume and prepare it for further analysis.',
-    backstory=(
-        "An expert in document parsing and information extraction, specialized in converting "
-        "complex resume formats into structured data. Highly efficient and accurate in "
-        "identifying relevant skills and experiences. Utilizes advanced LLM capabilities for deeper insights.\n\n"
-        "Your primary goal is to use the 'resume_processing_tool' to extract comprehensive text, skills, and a summary "
-        "from the provided PDF path and then return the output in a structured JSON format."
-    ),
+class FinalCrewOutput(BaseModel):
+    guidance: CareerGuidanceDetails = Field(description="Detailed career guidance for the user based on their profile and goals.")
+    matched_jobs: List[JobMatch] = Field(description="List of highly relevant job matches from the filtered job opportunities.")
+
+
+# --- Custom Tools (Mock Implementations for demonstration) ---
+class ResumeProcessingTool:
+    name: str = "Resume Processing Tool"
+    description: str = "Processes a PDF resume to extract key information like summary and skills."
+    
+    def _run(self, pdf_path: str) -> Dict[str, Any]:
+        print(f"DEBUG: Mocking ResumeProcessingTool for {pdf_path}. (In a real app, this parses the PDF)")
+        import time
+        time.sleep(1)
+        return {
+            "status": "success",
+            "skills": ["Python", "SQL", "Data Analysis", "Cloud Computing", "Machine Learning Fundamentals", "Project Management"],
+            "resume_summary": "Experienced professional with a strong background in data analysis, cloud computing, and a passion for machine learning. Proven ability to lead projects and deliver insights from complex datasets."
+        }
+
+class JobFilteringTool:
+    name: str = "Job Filtering Tool"
+    description: str = "Filters a list of predefined jobs based on user skills to find relevant opportunities."
+    
+    def _run(self, user_skills: List[str]) -> List[Dict[str, Any]]:
+        print(f"DEBUG: Mocking JobFilteringTool with user skills: {user_skills}. (In a real app, this fetches and filters jobs)")
+        import time
+        time.sleep(1.5)
+
+        all_mock_jobs = [
+            {"title": "Data Scientist", "company": "Tech Innovations", "location": "Remote", "skills_required": ["Python", "Machine Learning", "SQL", "Deep Learning", "TensorFlow"], "description": "Develop and deploy machine learning models to solve complex business problems."},
+            {"title": "Software Engineer (Backend)", "company": "Global Solutions", "location": "Hyderabad", "skills_required": ["Python", "Java", "APIs", "Microservices", "AWS"], "description": "Design and implement scalable backend services for large-scale applications."},
+            {"title": "Cloud Architect", "company": "Cloud Builders", "location": "Bangalore", "skills_required": ["AWS", "Azure", "Cloud Security", "Terraform", "Solution Design"], "description": "Design and implement secure and scalable cloud infrastructure."},
+            {"title": "DevOps Engineer", "company": "CI/CD Masters", "location": "Pune", "skills_required": ["Linux", "Docker", "Kubernetes", "CI/CD", "Ansible", "Jenkins"], "description": "Automate deployment pipelines and manage infrastructure as code."},
+            {"title": "Business Analyst", "company": "Consulting Group", "location": "Mumbai", "skills_required": ["SQL", "Data Modeling", "Business Process Mapping", "Stakeholder Management"], "description": "Analyze business needs and propose solutions."},
+            {"title": "Machine Learning Engineer", "company": "AI Driven Inc.", "location": "Seattle", "skills_required": ["Python", "TensorFlow", "PyTorch", "MLOps", "Model Deployment"], "description": "Build, optimize, and deploy machine learning models into production environments."},
+            {"title": "Data Analyst", "company": "Insightful Analytics", "location": "Chennai", "skills_required": ["SQL", "Excel", "Tableau", "Data Visualization", "Statistical Analysis"], "description": "Extract, clean, and analyze data to provide actionable business insights."},
+            {"title": "Product Manager (AI/ML)", "company": "Future Tech", "location": "San Francisco", "skills_required": ["Product Management", "AI/ML Concepts", "Market Research", "Roadmapping"], "description": "Define and launch AI/ML products that meet market needs and business goals."},
+            {"title": "Operations Research Analyst", "company": "Supply Chain Solutions", "location": "Atlanta", "skills_required": ["Python", "Optimization", "Statistics", "Simulation", "Decision Science"], "description": "Apply mathematical modeling and optimization techniques to improve operational efficiency."},
+            {"title": "Quantitative Analyst", "company": "Fintech Innovations", "location": "New York", "skills_required": ["Python", "R", "Statistics", "Financial Modeling", "Time Series Analysis"], "description": "Develop quantitative models for financial markets and risk management."}
+        ]
+        
+        filtered_jobs = []
+        user_skills_lower = {s.lower() for s in user_skills}
+        for job in all_mock_jobs:
+            job_skills_lower = {s.lower() for s in job["skills_required"]}
+            if any(skill in job_skills_lower for skill in user_skills_lower):
+                filtered_jobs.append(job)
+        
+        if len(filtered_jobs) > 7:
+            filtered_jobs = filtered_jobs[:7]
+
+        return filtered_jobs
+
+
+# --- Define Agents ---
+# The career_assistant_agent will use the groq_llm for its reasoning and Pydantic output.
+# IMPORTANT: 'groq_llm' MUST be initialized and not None here
+career_assistant_agent = Agent(
+    role='Personalized Career Advisor',
+    goal='Provide tailored career path suggestions, identify skill gaps, offer actionable steps, and list potential job titles based on user resume and career goals.',
+    backstory="""You are an expert career consultant with a deep understanding of industry trends, job market demands, and skill development strategies. 
+    You are adept at analyzing individual profiles and providing highly personalized and actionable guidance, guiding individuals towards successful careers.""",
     verbose=True,
     allow_delegation=False,
-    tools=[resume_processing_tool]
-)
-
-research_agent = Agent(
-    role='Job Researcher',
-    goal='Find and shortlist relevant job openings based on provided skills from a resume.',
-    backstory=(
-        "A meticulous job market analyst who tirelessly searches various job boards and "
-        "platforms to identify the best opportunities matching a candidate's profile. "
-        "**Note: Since I do not have direct access to live job boards, I will intelligently simulate "
-        "finding relevant jobs based on the provided skills and industry trends.**" # Added simulation note
-    ),
-    verbose=True,
-    allow_delegation=True
-)
-
-career_assistant_agent = Agent(
-    role='Career Advisor',
-    goal='Provide personalized career guidance and answer specific questions about job matches.',
-    backstory=(
-        "A compassionate and knowledgeable career counselor, dedicated to helping individuals "
-        "navigate their professional journey and make informed decisions. "
-        "Your final response MUST be a direct, professional, and conversational advice message. "
-        "It MUST NOT contain any internal 'Thought:', 'Action:', 'Action Input:', or 'Observation:' steps. "
-        "Start directly with the advice."
-    ),
-    verbose=True,
-    allow_delegation=True
+    llm=groq_llm # This is where the 'NoneType' error occurs if groq_llm is not set
 )
 
 # --- Define Tasks ---
-
-# MODIFIED: Expected output now includes 'resume_summary'
-resume_processing_task = Task(
-    description=(
-        "Process the PDF resume located at '{pdf_path}'. "
-        "Extract all readable text and then identify a comprehensive list of skills present in the resume. "
-        "Also, provide a concise summary of the resume's objective, education, and relevant experience. "
-        "The output should be a JSON object containing the 'extracted_text', a 'skills' array, and a 'resume_summary'."
-    ),
-    expected_output="A JSON object with 'extracted_text' (string), 'skills' (list of strings), and 'resume_summary' (string).",
-    agent=resume_agent,
-)
-
-# MODIFIED: Task description to emphasize simulation and use richer input
-job_search_task = Task(
-    description=(
-        "Given the JSON output from the resume analysis: {processed_resume_output}, "
-        "which contains 'extracted_text', a 'skills' array, and 'resume_summary'. "
-        "First, parse this JSON string to extract the 'skills' list and the 'resume_summary'. "
-        "Then, **simulate searching** for relevant job openings that directly align with these identified skills and the resume summary. "
-        "Provide a concise summary of the top 5 *plausible* job titles, their companies, and a generic placeholder link. "
-        "Format the output as a clear, readable markdown list. Ensure the job titles and companies sound realistic."
-    ),
-    expected_output="A markdown list of top 5 plausible job openings (Title, Company, Link), derived from the provided skills and resume summary.",
-    agent=research_agent,
-)
-
 career_guidance_task = Task(
     description=(
-        "Based on the identified job openings (markdown list): {job_matches}, "
-        "and the user's initial query: '{user_query}', "
-        "provide personalized career advice and suggest next steps for the user. "
-        "Answer the user's specific query related to the jobs or their career path. "
-        "Your final response MUST be a direct, friendly, and professional conversational advice message. "
-        "It MUST NOT contain any internal 'Thought:', 'Action:', 'Action Input:', or 'Observation:' steps. "
-        "Start directly with the advice. Respond as if you are the final output of the entire system."
+        "Given the `context_for_guidance` (which is a JSON string including resume summary, user skills, user query, and a list of filtered job matches), "
+        "generate comprehensive career guidance. This guidance should include:\n"
+        "1. **Career Path Suggestion:** A personalized suggestion for a career path that aligns with the user's resume and their stated career goal (`user_query`).\n"
+        "2. **Relevant Skills Gap:** Identify specific skills the user needs to acquire or improve to achieve their career goal and match the provided job opportunities. Be precise.\n"
+        "3. **Actionable Steps:** Detailed and practical steps to bridge the identified skills gaps. This can include specific online courses, certifications, "
+        "personal projects, networking strategies, or professional development activities.\n"
+        "4. **Potential Job Titles:** A list of 5-10 job titles that align with the user's current profile, the suggested career path, and the matched job opportunities.\n"
+        "The final output MUST be a Pydantic object of type `FinalCrewOutput`. The `guidance` field of this object must contain the career path suggestion, skills "
+        "gap, actionable steps, and potential job titles. The `matched_jobs` field of this object MUST be directly populated from the `filtered_jobs_list` provided "
+        "in the input `context_for_guidance`. Do NOT re-generate or modify the `matched_jobs` list; simply embed it. "
+        "Ensure there are no preambles, explanations, or extraneous text outside the Pydantic object."
     ),
-    expected_output="A friendly and professional conversational career advice message, formatted as a readable string or markdown, directly addressing the user's query and insights from job matches.",
+    expected_output="A comprehensive FinalCrewOutput Pydantic object containing detailed career guidance and a list of highly relevant job matches based on the user's resume and goals.",
     agent=career_assistant_agent,
+    output_pydantic=FinalCrewOutput
 )
-
-# --- Define the Crew creation function ---
-def create_career_crew():
-    return Crew(
-        agents=[resume_agent, research_agent, career_assistant_agent],
-        tasks=[resume_processing_task, job_search_task, career_guidance_task],
-        verbose=True
-    )
-
-if __name__ == "__main__":
-    dummy_pdf_path = "dummy_resume.pdf"
-    if not os.path.exists(dummy_pdf_path):
-        from reportlab.lib.pagesizes import letter
-        from reportlab.pdfgen import canvas
-        c = canvas.Canvas(dummy_pdf_path, pagesize=letter)
-        c.drawString(100, 750, "Resume of John Doe")
-        c.drawString(100, 730, "Skills: Python, Data Analysis, SQL, Machine Learning, Communication")
-        c.drawString(100, 710, "Experience: Software Engineer at Tech Solutions")
-        c.drawString(100, 690, "Education: Master of Science in Computer Science")
-        c.save()
-        logging.info(f"Created dummy PDF: {dummy_pdf_path}")
-
-    logging.info("Creating the career crew for direct test...")
-    crew = create_career_crew()
-
-    logging.info("## Running the Career Guidance Crew with a dummy resume...")
-    crew_result = crew.kickoff(
-        inputs={
-            'pdf_path': dummy_pdf_path,
-            'user_query': 'What are the best job titles for my skills and how can I improve my resume?'
-        }
-    )
-    logging.info("########################")
-    logging.info("## Crew Execution Finished")
-    logging.info("########################\n")
-    logging.info(crew_result)

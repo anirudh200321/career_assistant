@@ -9,3 +9,4 @@ streamlit
 httpx
 python-dotenv
 reportlab
+ langchain-groq

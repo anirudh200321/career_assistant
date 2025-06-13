@@ -1,0 +1,352 @@
+[
+  {
+    "id": "job001",
+    "title": "Software Engineer",
+    "category": "Technology",
+    "description": "Develop, test, and maintain software applications and systems.",
+    "skills": ["Python", "Java", "C++", "JavaScript", "SQL", "Cloud Platforms (AWS, Azure, GCP)", "Agile Methodologies", "Problem Solving", "Data Structures", "Algorithms"]
+  },
+  {
+    "id": "job002",
+    "title": "Data Scientist",
+    "category": "Data & Analytics",
+    "description": "Analyze complex data to extract insights, build predictive models, and inform business decisions.",
+    "skills": ["Python", "R", "SQL", "Machine Learning", "Statistical Modeling", "Data Visualization", "Big Data Technologies (Spark, Hadoop)", "Mathematics", "Communication"]
+  },
+  {
+    "id": "job003",
+    "title": "Marketing Manager",
+    "category": "Marketing & Sales",
+    "description": "Plan, execute, and manage marketing campaigns to promote products or services.",
+    "skills": ["Digital Marketing", "SEO/SEM", "Content Marketing", "Social Media Marketing", "Market Research", "Brand Management", "Analytics", "Project Management", "Communication"]
+  },
+  {
+    "id": "job004",
+    "title": "Registered Nurse (RN)",
+    "category": "Healthcare",
+    "description": "Provide direct patient care, administer medications, and educate patients and families.",
+    "skills": ["Patient Care", "Medication Administration", "Clinical Assessment", "Electronic Health Records (EHR)", "Communication", "Critical Thinking", "Empathy", "BLS/ACLS Certification"]
+  },
+  {
+    "id": "job005",
+    "title": "Financial Analyst",
+    "category": "Finance",
+    "description": "Analyze financial data, prepare reports, and provide insights to guide investment decisions.",
+    "skills": ["Financial Modeling", "Valuation", "Excel", "Data Analysis", "Accounting Principles", "Risk Management", "Forecasting", "Communication", "Attention to Detail"]
+  },
+  {
+    "id": "job006",
+    "title": "Project Manager",
+    "category": "Management",
+    "description": "Oversee projects from conception to completion, ensuring they are delivered on time and within budget.",
+    "skills": ["Project Planning", "Budget Management", "Risk Management", "Stakeholder Communication", "Team Leadership", "Agile/Scrum", "PMP Certification (preferred)", "Problem Solving"]
+  },
+  {
+    "id": "job007",
+    "title": "Graphic Designer",
+    "category": "Creative & Design",
+    "description": "Create visual concepts using computer software or by hand, to communicate ideas that inspire, inform, or captivate consumers.",
+    "skills": ["Adobe Creative Suite (Photoshop, Illustrator, InDesign)", "Typography", "Layout Design", "Branding", "UI/UX Principles", "Creativity", "Attention to Detail", "Communication"]
+  },
+  {
+    "id": "job008",
+    "title": "Human Resources Manager",
+    "category": "Human Resources",
+    "description": "Manage all aspects of HR operations, including recruitment, employee relations, and compensation.",
+    "skills": ["Recruitment", "Onboarding", "Employee Relations", "Compensation & Benefits", "HRIS Software", "Labor Law", "Communication", "Conflict Resolution", "Confidentiality"]
+  },
+  {
+    "id": "job009",
+    "title": "Cybersecurity Analyst",
+    "category": "Technology",
+    "description": "Protect computer systems and networks from cyber threats, breaches, and attacks.",
+    "skills": ["Network Security", "Vulnerability Assessment", "Incident Response", "Firewalls", "Intrusion Detection Systems (IDS)", "SIEM", "Encryption", "OS (Linux, Windows)", "Problem Solving"]
+  },
+  {
+    "id": "job010",
+    "title": "Operations Manager",
+    "category": "Operations",
+    "description": "Oversee daily operations, optimize processes, and ensure efficiency and productivity.",
+    "skills": ["Process Improvement", "Supply Chain Management", "Logistics", "Budgeting", "Team Management", "Quality Control", "Data Analysis", "Problem Solving"]
+  },
+  {
+    "id": "job011",
+    "title": "Content Writer",
+    "category": "Marketing & Communications",
+    "description": "Create engaging and informative written content for various platforms (websites, blogs, social media).",
+    "skills": ["Writing", "Editing", "Proofreading", "SEO Writing", "Research", "Content Strategy", "Grammar", "Adaptability", "Creativity"]
+  },
+  {
+    "id": "job012",
+    "title": "UX/UI Designer",
+    "category": "Creative & Design",
+    "description": "Design user-friendly and aesthetically pleasing interfaces for websites and applications.",
+    "skills": ["User Research", "Wireframing", "Prototyping", "Figma/Sketch/Adobe XD", "Usability Testing", "Information Architecture", "Interaction Design", "Visual Design", "Empathy"]
+  },
+  {
+    "id": "job013",
+    "title": "Accountant",
+    "category": "Finance",
+    "description": "Prepare and examine financial records, ensuring accuracy and compliance with laws and regulations.",
+    "skills": ["Bookkeeping", "Financial Reporting", "Tax Preparation", "Auditing", "QuickBooks/SAP", "Excel", "Attention to Detail", "Analytical Skills", "Ethics"]
+  },
+  {
+    "id": "job014",
+    "title": "Sales Representative",
+    "category": "Sales",
+    "description": "Sell products or services to customers, build client relationships, and achieve sales targets.",
+    "skills": ["Sales Pitches", "Negotiation", "Lead Generation", "CRM Software (Salesforce)", "Customer Service", "Communication", "Persuasion", "Goal-Oriented"]
+  },
+  {
+    "id": "job015",
+    "title": "Customer Service Representative",
+    "category": "Customer Service",
+    "description": "Assist customers with inquiries, resolve issues, and provide product or service information.",
+    "skills": ["Active Listening", "Problem Solving", "Empathy", "Communication (Verbal & Written)", "Patience", "Conflict Resolution", "Ticketing Systems", "Product Knowledge"]
+  },
+  {
+    "id": "job016",
+    "title": "Civil Engineer",
+    "category": "Engineering",
+    "description": "Design, build, and maintain infrastructure projects like roads, bridges, and buildings.",
+    "skills": ["AutoCAD", "Structural Analysis", "Project Planning", "Construction Management", "Surveying", "Material Science", "Regulations (Building Codes)", "Problem Solving"]
+  },
+  {
+    "id": "job017",
+    "title": "Electrician",
+    "category": "Skilled Trades",
+    "description": "Install, maintain, and repair electrical wiring, equipment, and fixtures.",
+    "skills": ["Electrical Systems", "Wiring", "Troubleshooting", "Blueprint Reading", "Safety Regulations", "Hand Tools", "Problem Solving", "Attention to Detail"]
+  },
+  {
+    "id": "job018",
+    "title": "Teacher / Educator",
+    "category": "Education",
+    "description": "Educate students, develop lesson plans, and foster a positive learning environment.",
+    "skills": ["Lesson Planning", "Classroom Management", "Curriculum Development", "Differentiated Instruction", "Assessment", "Communication", "Patience", "Creativity"]
+  },
+  {
+    "id": "job019",
+    "title": "Product Manager",
+    "category": "Product Development",
+    "description": "Define product vision, strategy, and roadmap, working with engineering, design, and marketing teams.",
+    "skills": ["Product Strategy", "Market Analysis", "Roadmapping", "Agile/Scrum", "User Stories", "Communication", "Stakeholder Management", "Leadership", "Data Analysis"]
+  },
+  {
+    "id": "job020",
+    "title": "Business Analyst",
+    "category": "Business & Consulting",
+    "description": "Analyze business processes, identify areas for improvement, and define solutions to meet business goals.",
+    "skills": ["Requirements Gathering", "Process Mapping", "Data Analysis", "SQL", "Excel", "UML", "Stakeholder Interviewing", "Communication", "Problem Solving"]
+  },
+  {
+    "id": "job021",
+    "title": "DevOps Engineer",
+    "category": "Technology",
+    "description": "Bridge the gap between development and operations, automating software delivery and infrastructure management.",
+    "skills": ["CI/CD (Jenkins, GitLab CI)", "Cloud Platforms (AWS, Azure, GCP)", "Docker", "Kubernetes", "Scripting (Python, Bash)", "Configuration Management (Ansible)", "Monitoring Tools (Prometheus)", "Linux", "Networking"]
+  },
+  {
+    "id": "job022",
+    "title": "Biomedical Engineer",
+    "category": "Engineering",
+    "description": "Apply engineering principles to medicine and biology to design and develop healthcare products.",
+    "skills": ["Medical Devices", "Biomaterials", "Signal Processing", "CAD Software", "Biostatistics", "Regulatory Affairs", "Problem Solving", "Research"]
+  },
+  {
+    "id": "job023",
+    "title": "Supply Chain Manager",
+    "category": "Operations",
+    "description": "Manage the flow of goods and services, from raw materials to final delivery.",
+    "skills": ["Logistics", "Inventory Management", "Procurement", "Negotiation", "Supply Chain Optimization", "ERP Systems", "Data Analysis", "Problem Solving"]
+  },
+  {
+    "id": "job024",
+    "title": "UX Researcher",
+    "category": "Creative & Design",
+    "description": "Conduct research to understand user behaviors, needs, and motivations to inform product design.",
+    "skills": ["Qualitative Research", "Quantitative Research", "Usability Testing", "Interviews", "Surveys", "Persona Development", "Journey Mapping", "Statistical Analysis", "Empathy"]
+  },
+  {
+    "id": "job025",
+    "title": "Public Relations Specialist",
+    "category": "Marketing & Communications",
+    "description": "Manage the public image of an individual or organization, building positive relationships with media and the public.",
+    "skills": ["Media Relations", "Press Release Writing", "Crisis Communication", "Event Planning", "Social Media", "Networking", "Public Speaking", "Writing"]
+  },
+  {
+    "id": "job026",
+    "title": "Legal Counsel / Attorney",
+    "category": "Legal",
+    "description": "Advise clients on legal matters, represent them in court, and prepare legal documents.",
+    "skills": ["Legal Research", "Contract Law", "Litigation", "Negotiation", "Case Management", "Public Speaking", "Analytical Thinking", "Writing"]
+  },
+  {
+    "id": "job027",
+    "title": "Data Analyst",
+    "category": "Data & Analytics",
+    "description": "Collect, clean, and interpret data to identify trends and create reports for business insights.",
+    "skills": ["SQL", "Excel", "Data Cleaning", "Data Visualization (Tableau, Power BI)", "Statistical Analysis", "Report Generation", "Communication", "Attention to Detail"]
+  },
+  {
+    "id": "job028",
+    "title": "Chemist",
+    "category": "Science & Research",
+    "description": "Conduct research and experiments on the properties and interactions of chemical substances.",
+    "skills": ["Laboratory Techniques", "Spectroscopy", "Chromatography", "Chemical Synthesis", "Data Analysis", "Problem Solving", "Safety Protocols", "Research Methods"]
+  },
+  {
+    "id": "job029",
+    "title": "Architect",
+    "category": "Architecture & Construction",
+    "description": "Design buildings and other structures, ensuring they are functional, safe, and aesthetically pleasing.",
+    "skills": ["Architectural Design", "AutoCAD", "Revit", "SketchUp", "Building Codes", "Construction Principles", "Project Management", "Creativity", "Attention to Detail"]
+  },
+  {
+    "id": "job030",
+    "title": "Web Developer (Frontend)",
+    "category": "Technology",
+    "description": "Develop and maintain the user-facing elements of websites and web applications.",
+    "skills": ["HTML", "CSS", "JavaScript", "React/Angular/Vue.js", "Responsive Design", "UI/UX Principles", "API Integration", "Git", "Problem Solving"]
+  },
+  {
+    "id": "job031",
+    "title": "Web Developer (Backend)",
+    "category": "Technology",
+    "description": "Build and maintain the server-side logic and database interactions for web applications.",
+    "skills": ["Python (Django/Flask)", "Node.js (Express)", "Java (Spring)", "Ruby on Rails", "SQL/NoSQL Databases", "API Development", "Authentication/Authorization", "Cloud Platforms", "Scalability"]
+  },
+  {
+    "id": "job032",
+    "title": "Network Administrator",
+    "category": "IT & Networking",
+    "description": "Install, configure, and maintain an organization's computer networks.",
+    "skills": ["Network Protocols (TCP/IP)", "Routers", "Switches", "Firewalls", "VPNs", "Network Troubleshooting", "Cisco/CompTIA Certifications", "Security Best Practices"]
+  },
+  {
+    "id": "job033",
+    "title": "Database Administrator (DBA)",
+    "category": "IT & Data",
+    "description": "Manage and maintain databases, ensuring their performance, security, and integrity.",
+    "skills": ["SQL", "Database Design", "Backup & Recovery", "Performance Tuning", "Security Management", "Oracle/MySQL/PostgreSQL/MongoDB", "Data Modeling", "Troubleshooting"]
+  },
+  {
+    "id": "job034",
+    "title": "Technical Writer",
+    "category": "Documentation & Communications",
+    "description": "Create clear and concise technical documentation, such as manuals, guides, and reports.",
+    "skills": ["Technical Writing", "Editing", "Information Architecture", "UML", "Markdown/XML", "Software Documentation Tools", "Research", "Attention to Detail", "Communication"]
+  },
+  {
+    "id": "job035",
+    "title": "Cloud Architect",
+    "category": "Technology",
+    "description": "Design and implement cloud infrastructure solutions for scalability, security, and cost-effectiveness.",
+    "skills": ["AWS", "Azure", "GCP", "Cloud Security", "Network Architecture", "Containerization (Docker, Kubernetes)", "Infrastructure as Code (Terraform)", "Migration Strategies", "Cost Optimization"]
+  },
+  {
+    "id": "job036",
+    "title": "Game Developer",
+    "category": "Gaming",
+    "description": "Design and develop video games, including programming, graphics, and gameplay mechanics.",
+    "skills": ["C#/C++", "Unity/Unreal Engine", "Game Design Principles", "Physics Engines", "Shader Programming", "Version Control (Git)", "Problem Solving", "Creativity"]
+  },
+  {
+    "id": "job037",
+    "title": "Pharmacist",
+    "category": "Healthcare",
+    "description": "Dispense medications, provide drug information, and counsel patients on proper drug use.",
+    "skills": ["Pharmacology", "Drug Interactions", "Patient Counseling", "Pharmacy Law", "Inventory Management", "Communication", "Accuracy", "Attention to Detail"]
+  },
+  {
+    "id": "job038",
+    "title": "Industrial Engineer",
+    "category": "Engineering",
+    "description": "Optimize complex processes, systems, and organizations to improve efficiency and quality.",
+    "skills": ["Process Optimization", "Lean Manufacturing", "Six Sigma", "Statistical Analysis", "Ergonomics", "Supply Chain", "Simulation Software", "Problem Solving"]
+  },
+  {
+    "id": "job039",
+    "title": "Social Media Manager",
+    "category": "Marketing & Communications",
+    "description": "Develop and implement social media strategies to increase brand awareness and engagement.",
+    "skills": ["Social Media Platforms (Facebook, Instagram, LinkedIn, X)", "Content Creation", "Community Management", "Analytics", "Paid Social Advertising", "Trend Analysis", "Communication", "Creativity"]
+  },
+  {
+    "id": "job040",
+    "title": "Executive Assistant",
+    "category": "Administrative",
+    "description": "Provide high-level administrative support to executives, managing schedules, communications, and projects.",
+    "skills": ["Calendar Management", "Travel Planning", "Correspondence", "Meeting Coordination", "Microsoft Office Suite", "Organizational Skills", "Discretion", "Communication"]
+  },
+  {
+    "id": "job041",
+    "title": "Veterinarian",
+    "category": "Healthcare",
+    "description": "Diagnose, treat, and prevent diseases in animals.",
+    "skills": ["Animal Anatomy", "Pathology", "Surgery", "Medication Administration", "Client Communication", "Diagnostic Skills", "Empathy", "Problem Solving"]
+  },
+  {
+    "id": "job042",
+    "title": "Journalist / Reporter",
+    "category": "Media & Communications",
+    "description": "Gather, write, and report news stories for various media outlets.",
+    "skills": ["Research", "Interviewing", "Writing", "Reporting", "Fact-Checking", "Ethics", "Deadlines", "Public Speaking"]
+  },
+  {
+    "id": "job043",
+    "title": "Event Manager",
+    "category": "Event Planning",
+    "description": "Plan, organize, and execute events, from corporate conferences to weddings.",
+    "skills": ["Event Logistics", "Budget Management", "Vendor Negotiation", "Marketing & Promotion", "Problem Solving", "Client Relations", "Attention to Detail", "Stress Management"]
+  },
+  {
+    "id": "job044",
+    "title": "Research Scientist",
+    "category": "Science & Research",
+    "description": "Conduct scientific research, design experiments, analyze data, and publish findings.",
+    "skills": ["Scientific Method", "Experiment Design", "Data Analysis", "Statistical Software", "Literature Review", "Report Writing", "Collaboration", "Critical Thinking"]
+  },
+  {
+    "id": "job045",
+    "title": "Food Scientist",
+    "category": "Science & Food Industry",
+    "description": "Develop new food products, improve food safety, and study food composition.",
+    "skills": ["Food Chemistry", "Microbiology", "Food Processing", "Quality Control", "Sensory Evaluation", "Regulatory Affairs", "Product Development", "Research"]
+  },
+  {
+    "id": "job046",
+    "title": "Urban Planner",
+    "category": "Urban Development",
+    "description": "Develop plans and programs for the use of land, considering environmental, social, and economic factors.",
+    "skills": ["GIS (Geographic Information Systems)", "Zoning Laws", "Community Engagement", "Data Analysis", "Policy Development", "Project Management", "Sustainable Development"]
+  },
+  {
+    "id": "job047",
+    "title": "Realtor / Real Estate Agent",
+    "category": "Real Estate",
+    "description": "Help clients buy, sell, and rent properties.",
+    "skills": ["Sales", "Negotiation", "Market Analysis", "Property Valuation", "Client Relations", "Networking", "Legal Compliance", "Communication"]
+  },
+  {
+    "id": "job048",
+    "title": "Paralegal",
+    "category": "Legal",
+    "description": "Assist lawyers with legal research, document preparation, and case management.",
+    "skills": ["Legal Research", "Document Drafting", "Case Management", "LexisNexis/Westlaw", "Attention to Detail", "Organization", "Communication", "Confidentiality"]
+  },
+  {
+    "id": "job049",
+    "title": "Quality Assurance (QA) Engineer",
+    "category": "Technology",
+    "description": "Ensure the quality of software products through testing, bug reporting, and quality control processes.",
+    "skills": ["Test Case Creation", "Manual Testing", "Automated Testing (Selenium, Cypress)", "Bug Tracking (Jira)", "Regression Testing", "Performance Testing", "SDLC", "Attention to Detail"]
+  },
+  {
+    "id": "job050",
+    "title": "Logistics Coordinator",
+    "category": "Operations",
+    "description": "Coordinate and track the movement of goods, ensuring timely and efficient delivery.",
+    "skills": ["Logistics Software", "Inventory Management", "Shipping & Receiving", "Route Optimization", "Customs Regulations", "Communication", "Problem Solving", "Organization"]
+  }
+]
